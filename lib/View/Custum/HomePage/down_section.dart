@@ -1,4 +1,5 @@
 import 'package:chat_app/Constantes/app_colors.dart';
+import 'package:chat_app/View/Shared/user_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -29,32 +30,16 @@ class CustumListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.all(0),
-      leading: SizedBox(
-          width: 30.sp,
-          height: 30.sp,
-          child: Stack(children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(60),
-                child: Image.asset(
-                  'assets/person.png',
-                )),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                width: 10.sp,
-                height: 10.sp,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(60),
-                    color: Colors.green),
-              ),
-            ),
-          ])),
+      leading: UserIcon(
+        hight: 30.sp,
+        width: 30.sp,
+      ),
       title: Text(
         'Brahmi issam',
         style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.bold),
       ),
       subtitle: Padding(
-        padding:  EdgeInsets.only(right: 70.w),
+        padding: EdgeInsets.only(right: 70.w),
         child: Text(
           'i was there in the house',
           overflow: TextOverflow.ellipsis,

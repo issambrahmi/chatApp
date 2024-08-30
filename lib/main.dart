@@ -1,4 +1,5 @@
 import 'package:chat_app/Constantes/app_colors.dart';
+import 'package:chat_app/View/Pages/chat_page.dart';
 import 'package:chat_app/View/Pages/home_page.dart';
 import 'package:chat_app/View/Pages/login_page.dart';
 import 'package:chat_app/View/Pages/register_page.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: const HomePage(),
+      child: const ChatPage(),
     );
   }
 }
