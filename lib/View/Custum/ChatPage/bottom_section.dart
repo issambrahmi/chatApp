@@ -43,7 +43,8 @@ class ChatBottomSection extends StatelessWidget {
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
                               borderSide: const BorderSide(
-                                  color: Colors.black, width: 1))),
+                                  color: Colors.transparent))
+                                  ),
                     ),
                   )),
               SizedBox(width: 10.w),

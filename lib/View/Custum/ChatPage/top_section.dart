@@ -1,6 +1,7 @@
 import 'package:chat_app/View/Shared/user_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class ChatTpoSection extends StatelessWidget {
   const ChatTpoSection({super.key});
@@ -11,10 +12,13 @@ class ChatTpoSection extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Row(
         children: [
-          Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 25.sp,
-            color: Colors.black,
+          GestureDetector(
+            onTap: () => Get.back(),
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 25.sp,
+              color: Colors.black,
+            ),
           ),
           SizedBox(width: 10.w),
           UserIcon(

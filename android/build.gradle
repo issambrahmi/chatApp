@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        google() // Add this if it's missing
+        mavenCentral() // Add this if it's missing
+        jcenter() // Deprecated but still sometimes necessary
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.2'
+        classpath 'com.google.gms:google-services:4.3.15' // Update to the latest version
+    }
+}
 allprojects {
     repositories {
         google()

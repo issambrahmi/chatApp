@@ -1,9 +1,10 @@
 import 'package:chat_app/Constantes/app_colors.dart';
 import 'package:chat_app/View/Custum/LoginPage/form.dart';
+import 'package:chat_app/View/Pages/register_page.dart';
 import 'package:chat_app/View/Shared/button.dart';
-import 'package:chat_app/View/Shared/myform_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -11,9 +12,9 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: MyColors.mainColor,
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 22.w),
+        padding: EdgeInsets.symmetric(horizontal: 30.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -32,6 +33,31 @@ class LoginPage extends StatelessWidget {
               width: double.infinity,
               text: 'Login',
               textSize: 22.sp,
+            ),
+            SizedBox(height: 40.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Dont Have an account ?',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 5.w),
+                GestureDetector(
+                  onTap: () => Get.to(() => const RegisterPage()),
+                  child: Text(
+                    'Sign UP',
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.bold,
+                      color: MyColors.appColor,
+                    ),
+                  ),
+                )
+              ],
             )
           ],
         ),
