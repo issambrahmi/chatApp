@@ -7,13 +7,13 @@ class ChatService {
   static final CollectionReference<Map<String, dynamic>> _chatRef =
       FirebaseFirestore.instance.collection('chat');
 
-  static Future<List<Map<String, dynamic>>> getAllChats(String userId) async {
-    List<Map<String, dynamic>> chats = [];
+  static Future<List<ChatModel>> getAllChats(String userId) async {
+    List<ChatModel> chats = [];
     try {
       QuerySnapshot<Map<String, dynamic>> docs =
           await _chatRef.where('users_id', arrayContains: userId).get();
       for (var doc in docs.docs) {
-        chats.add(doc.data());
+        chats.add(ChatModel.fromFireStore(doc));
       }
       return chats;
     } catch (e) {

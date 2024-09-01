@@ -20,13 +20,25 @@ class MessageServices {
     try {
       final chatId = ChatService.addChat(chat).toString();
       if (chatId != '') {
-        await _chatRef
-            .doc(chatId)
-            .collection('messages')
-            .add(msg.toMap());
+        await _chatRef.doc(chatId).collection('messages').add(msg.toMap());
       }
     } catch (e) {
       debugPrint('****** $e');
+    }
+  }
+
+  static Future<List<MessageModel>> getMessages(String chatId) async {
+    List<MessageModel> messagesList = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> messages =
+          await _chatRef.doc(chatId).collection('messages').get();
+      for (var doc in messages.docs) {
+        messagesList.add(MessageModel.fromFireStore(doc));
+      }
+      return messagesList;
+    } catch (e) {
+      debugPrint('***** $e');
+      return [];
     }
   }
 }
