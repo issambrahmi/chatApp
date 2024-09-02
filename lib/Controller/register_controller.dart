@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:chat_app/Model/Enums/register_enum.dart';
+import 'package:chat_app/Model/Enums/request_state_enum.dart';
 import 'package:chat_app/Model/user_model.dart';
 import 'package:chat_app/Services/auth_services.dart';
+import 'package:chat_app/Services/image_services.dart';
 import 'package:chat_app/View/Pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +19,7 @@ class RegisterController extends GetxController {
   final GlobalKey<FormState> registerKey = GlobalKey<FormState>();
   XFile? image;
   bool isPassword = true;
+  RequestStateEnum state = RequestStateEnum.start;
 
   @override
   void onInit() {
@@ -35,18 +40,35 @@ class RegisterController extends GetxController {
   }
 
   void register() async {
+    state = RequestStateEnum.waiting;
+    update();
     if (registerKey.currentState!.validate()) {
       if (password.text == confirmPassword.text) {
-        RegisterEnum result = await AuthServices.createUser(UserModel(
-            username: username.text,
-            email: email.text,
-            password: password.text,
-            isOnline: true,
-            lastSeen: Timestamp.now()));
-        if (result == RegisterEnum.success) {
-          Get.offAll(() => const HomePage());
+        String? imageName;
+        if (image != null) {
+          imageName = await ImageServices.uploadImageToFireBase(
+              File(image!.path), Timestamp.now().toString());
+        }
+        if (image == null || (image != null && imageName != null)) {
+          RegisterEnum result = await AuthServices.createUser(UserModel(
+              username: username.text,
+              email: email.text,
+              password: password.text,
+              imageUrl: imageName,
+              isOnline: true,
+              lastSeen: Timestamp.now()));
+          if (result == RegisterEnum.success) {
+            state = RequestStateEnum.success;
+            update();
+            Get.offAll(() => const HomePage());
+          } else {
+            state = RequestStateEnum.error;
+            update();
+            debugPrint('error******');
+          }
         } else {
-          debugPrint('error******');
+          state = RequestStateEnum.error;
+          update();
         }
       }
     }

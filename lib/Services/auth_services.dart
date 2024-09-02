@@ -12,7 +12,7 @@ class AuthServices {
   static Future<RegisterEnum> createUser(UserModel userModel) async {
     try {
       final user = await userCredential.createUserWithEmailAndPassword(
-          email: userModel.email.trim(), password: userModel.password!.trim());
+          email: userModel.email.trim(), password: userModel.password!);
       await userRef.doc(user.user!.uid).set(userModel.toMap());
       return RegisterEnum.success;
     } on FirebaseAuthException catch (e) {

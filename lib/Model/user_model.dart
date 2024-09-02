@@ -4,7 +4,7 @@ class UserModel {
   final String username;
   final String email;
   final String? password;
-  final String? imageUrl;
+  String? imageUrl;
   final bool isOnline;
   final Timestamp lastSeen;
 
@@ -26,6 +26,16 @@ class UserModel {
         imageUrl: data['image_url'],
         isOnline: data['is_online'],
         lastSeen: data['last_seen']);
+  }
+
+    factory UserModel.fromMap(Map<String,dynamic> user) {
+    return UserModel(
+        username: user['username'],
+        email: user['email'],
+        password: user['password'],
+        imageUrl: user['image_url'],
+        isOnline: user['is_online'],
+        lastSeen: user['last_seen']);
   }
 
   Map<String, dynamic> toMap() {

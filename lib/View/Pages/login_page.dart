@@ -1,6 +1,7 @@
 import 'package:chat_app/Constantes/app_colors.dart';
 import 'package:chat_app/Controller/auth_controller.dart';
 import 'package:chat_app/Controller/login_controller.dart';
+import 'package:chat_app/Model/Enums/request_state_enum.dart';
 import 'package:chat_app/View/Custum/LoginPage/login_form.dart';
 import 'package:chat_app/View/Pages/register_page.dart';
 import 'package:chat_app/View/Shared/button.dart';
@@ -16,55 +17,73 @@ class LoginPage extends StatelessWidget {
     LoginController controller = Get.put(LoginController());
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-                child: Image.asset(
-              'assets/logo.png',
-              width: double.infinity,
-              height: 60.h,
-              fit: BoxFit.contain,
-            )),
-            SizedBox(height: 80.h),
-            const MyLoginForm(),
-            SizedBox(height: 20.h),
-            MyButton(
-              hieght: 50.h,
-              width: double.infinity,
-              text: 'Login',
-              textSize: 22.sp,
-              tap: () => controller.login(),
-            ),
-            SizedBox(height: 40.h),
-            Row(
+      body: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30.w),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Dont Have an account ?',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Center(
+                    child: Image.asset(
+                  'assets/logo.png',
+                  width: double.infinity,
+                  height: 60.h,
+                  fit: BoxFit.contain,
+                )),
+                SizedBox(height: 80.h),
+                const MyLoginForm(),
+                SizedBox(height: 20.h),
+                MyButton(
+                  hieght: 50.h,
+                  width: double.infinity,
+                  text: 'Login',
+                  textSize: 22.sp,
+                  tap: () => controller.login(),
                 ),
-                SizedBox(width: 5.w),
-                GestureDetector(
-                  onTap: () => Get.to(() => const RegisterPage()),
-                  child: Text(
-                    'Sign UP',
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.bold,
-                      color: MyColors.appColor,
+                SizedBox(height: 40.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Dont Have an account ?',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
+                    SizedBox(width: 5.w),
+                    GestureDetector(
+                      onTap: () => Get.to(() => const RegisterPage()),
+                      child: Text(
+                        'Sign UP',
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                          color: MyColors.appColor,
+                        ),
+                      ),
+                    )
+                  ],
                 )
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+          GetBuilder<LoginController>(builder: (context) {
+            return controller.state == RequestStateEnum.waiting
+                ? Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: Colors.black.withOpacity(0.3),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: MyColors.appColor,
+                      ),
+                    ),
+                  )
+                : const SizedBox();
+          })
+        ],
       ),
     );
   }
