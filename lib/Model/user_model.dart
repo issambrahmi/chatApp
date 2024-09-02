@@ -6,7 +6,7 @@ class UserModel {
   final String? password;
   final String? imageUrl;
   final bool isOnline;
-  final String lastSeen;
+  final Timestamp lastSeen;
 
   UserModel({
     required this.username,

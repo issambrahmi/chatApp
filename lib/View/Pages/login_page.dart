@@ -1,5 +1,7 @@
 import 'package:chat_app/Constantes/app_colors.dart';
-import 'package:chat_app/View/Custum/LoginPage/form.dart';
+import 'package:chat_app/Controller/auth_controller.dart';
+import 'package:chat_app/Controller/login_controller.dart';
+import 'package:chat_app/View/Custum/LoginPage/login_form.dart';
 import 'package:chat_app/View/Pages/register_page.dart';
 import 'package:chat_app/View/Shared/button.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LoginController controller = Get.put(LoginController());
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -33,6 +36,7 @@ class LoginPage extends StatelessWidget {
               width: double.infinity,
               text: 'Login',
               textSize: 22.sp,
+              tap: () => controller.login(),
             ),
             SizedBox(height: 40.h),
             Row(

@@ -1,3 +1,4 @@
+import 'package:chat_app/Model/Enums/login_enum.dart';
 import 'package:chat_app/Model/Enums/register_enum.dart';
 import 'package:chat_app/Model/user_model.dart';
 import 'package:chat_app/Services/auth_services.dart';
@@ -5,16 +6,14 @@ import 'package:chat_app/View/Pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
-class RegisterController extends GetxController {
+class AuthController extends GetxController {
   late TextEditingController email;
   late TextEditingController password;
   late TextEditingController confirmPassword;
   late TextEditingController username;
+  final GlobalKey<FormState> loginKey = GlobalKey<FormState>();
   final GlobalKey<FormState> registerKey = GlobalKey<FormState>();
-  XFile? image;
-  bool isPassword = true;
 
   @override
   void onInit() {
@@ -25,13 +24,15 @@ class RegisterController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    email.dispose();
-    password.dispose();
-    confirmPassword.dispose();
-    username.dispose();
-    super.onClose();
+  void login() async {
+    if (loginKey.currentState!.validate()) {
+      LoginEnum result = await AuthServices.login(email.text, password.text);
+      if (result == LoginEnum.success) {
+        Get.toEnd(() => const HomePage());
+      } else {
+        debugPrint('error******');
+      }
+    }
   }
 
   void register() async {
@@ -44,7 +45,7 @@ class RegisterController extends GetxController {
             isOnline: true,
             lastSeen: Timestamp.now()));
         if (result == RegisterEnum.success) {
-          Get.offAll(() => const HomePage());
+          Get.toEnd(() => const HomePage());
         } else {
           debugPrint('error******');
         }
