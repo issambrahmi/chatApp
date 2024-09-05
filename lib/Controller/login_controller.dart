@@ -47,15 +47,19 @@ class LoginController extends GetxController {
             Uint8List? userPic = await ImageServices.loadImageFromFireBase(
                 user.imageUrl.toString());
             if (userPic != null) {
-              HiveServices.saveUserDataLocaly(
-                  user, await File(user.username).writeAsBytes(userPic));
-              // ImageServices.saveImageLocally(
-              //     await File(user.username).writeAsBytes(userPic),
-              //     user.username);
+              HiveServices.saveUserDataLocaly(user, userPic);
+              Get.offAll(() => const HomePage());
+            } else {
+              debugPrint('error******');
+              state = RequestStateEnum.error;
+              update();
             }
           }
+        } else {
+          debugPrint('error******');
+          state = RequestStateEnum.error;
+          update();
         }
-        Get.offAll(() => const HomePage());
       } else {
         debugPrint('error******');
         state = RequestStateEnum.error;

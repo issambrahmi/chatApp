@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,27 +7,29 @@ class ImageServices {
   static final FirebaseStorage _storage = FirebaseStorage.instance;
 
   static Future<String?> saveImageLocally(
-      File imageFile, String userName) async {
+      Uint8List imageData, String userName) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final String path = directory.path;
-      final String fileName = userName;
-      final File localImage = await imageFile.copy('$path/$fileName');
-      return localImage.path;
+      final String path = '${directory.path}/$userName';
+      final file = File(path);
+      await file.writeAsBytes(imageData);
+      // final String fileName = userName;
+      // final File localImage = await imageFile.copy('$path/$fileName');
+      return path;
     } catch (e) {
       debugPrint('Error saving image: $e');
       return null;
     }
   }
 
-  static Future<File?> loadImageLocaly() async {
+  static Future<File?> loadImageLocaly(String username) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final String path = '${directory.path}/user_profile_image.png';
+      final String path = '${directory.path}/$username';
       return File(path);
     } catch (e) {
       debugPrint('Error loading image: $e');
-      return null;
+      return null; 
     }
   }
 

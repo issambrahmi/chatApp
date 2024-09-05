@@ -28,7 +28,7 @@ class UserModel {
         lastSeen: data['last_seen']);
   }
 
-    factory UserModel.fromMap(Map<String,dynamic> user) {
+    factory UserModel.fromMap(Map<dynamic,dynamic> user) {
     return UserModel(
         username: user['username'],
         email: user['email'],

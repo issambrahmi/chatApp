@@ -1,5 +1,6 @@
 import 'package:chat_app/Constantes/app_colors.dart';
 import 'package:chat_app/Controller/home_controller.dart';
+import 'package:chat_app/Services/hive_services.dart';
 import 'package:chat_app/View/Custum/HomePage/down_section.dart';
 import 'package:chat_app/View/Custum/HomePage/top_section.dart';
 import 'package:chat_app/View/Custum/HomePage/user_info.dart';
@@ -15,6 +16,9 @@ class HomePage extends StatelessWidget {
     Get.put(HomeController());
     return Scaffold(
       backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        HiveServices.logOut();
+      }),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 22.w),

@@ -47,7 +47,7 @@ class RegisterController extends GetxController {
         String? imageName;
         if (image != null) {
           imageName = await ImageServices.uploadImageToFireBase(
-              File(image!.path), Timestamp.now().toString());
+              File(image!.path), email.text.trim());
         }
         if (image == null || (image != null && imageName != null)) {
           RegisterEnum result = await AuthServices.createUser(UserModel(
