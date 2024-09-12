@@ -9,6 +9,7 @@ import 'package:chat_app/Services/hive_services.dart';
 import 'package:chat_app/Services/image_services.dart';
 import 'package:chat_app/Services/user_services.dart';
 import 'package:chat_app/View/Pages/home_page.dart';
+import 'package:chat_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -41,20 +42,11 @@ class LoginController extends GetxController {
       LoginEnum result = await AuthServices.login(email.text, password.text);
       if (result == LoginEnum.success) {
         UserModel? user =
-            await UserServices.getUserDataFromFireBase(email.text);
+            await UserServices.getUserDataFromFireBase(email.text.trim());
         if (user != null) {
-          if (user.imageUrl != null) {
-            Uint8List? userPic = await ImageServices.loadImageFromFireBase(
-                user.imageUrl.toString());
-            if (userPic != null) {
-              HiveServices.saveUserDataLocaly(user, userPic);
-              Get.offAll(() => const HomePage());
-            } else {
-              debugPrint('error******');
-              state = RequestStateEnum.error;
-              update();
-            }
-          }
+          HiveServices.saveUserDataLocaly(user);
+          userData = user;
+          Get.offAll(() => const HomePage());
         } else {
           debugPrint('error******');
           state = RequestStateEnum.error;

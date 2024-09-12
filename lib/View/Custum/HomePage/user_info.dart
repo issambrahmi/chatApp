@@ -31,26 +31,30 @@ class HomeUserInfos extends StatelessWidget {
                     ),
             ),
             SizedBox(width: 10.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  userData.username,
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  userData.isOnline ? 'online' : 'offline',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
-                    color: userData.isOnline
-                        ? Colors.green
-                        : MyColors.greyColor.shade600,
-                  ),
-                ),
-              ],
-            )
+            userData != null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        userData!.username,
+                        style: TextStyle(
+                            fontSize: 14.sp, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        userData != null
+                            ? (userData!.isOnline ? 'online' : 'offline')
+                            : '',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          color: userData!.isOnline
+                              ? Colors.green
+                              : MyColors.greyColor.shade600,
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox()
           ],
         ),
       ],

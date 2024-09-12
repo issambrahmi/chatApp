@@ -1,27 +1,21 @@
-import 'dart:io';
+import 'dart:ffi';
 
+import 'package:chat_app/Constantes/constantes.dart';
 import 'package:chat_app/Model/chat_model.dart';
 import 'package:chat_app/Model/user_model.dart';
-import 'package:chat_app/Services/image_services.dart';
 import 'package:chat_app/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
 class HiveServices {
-  static void saveUserDataLocaly(UserModel user, Uint8List image) async {
-    final userBox = await Hive.openBox('user_box');
-    final loginBox = await Hive.openBox<bool>('Login');
+  static void saveUserDataLocaly(UserModel user) async {
+    final userBox = await Hive.openBox(AppConstanntes.userBox);
+    final loginBox = await Hive.openBox<bool>(AppConstanntes.loginBox);
 
     try {
-      await loginBox.put('is_login', true);
-      String? img = await ImageServices.saveImageLocally(image, user.username);
-      if (img != null) {
-        user.imageUrl = img;
-      }
-      await userBox.put('user', user.toMap());
-      // else {
-      //   throw Exception('image didnt saved');
-      // }
+      await userBox.put('user', {...user.toMap(), 'user_id': userId});
+      loginBox.put('is_login', true);
     } catch (e) {
       debugPrint('******* savedUserData $e');
     }
@@ -29,35 +23,45 @@ class HiveServices {
     loginBox.close();
   }
 
-  static Future<UserModel?> getUserDataLocaly() async {
-    final userBox = await Hive.openBox('user_box');
+  static void getUserDataLocaly() async {
+    final userBox = await Hive.openBox(AppConstanntes.userBox);
 
     try {
-      Map<dynamic, dynamic>? user = userBox.get('user');
+      Map result = userBox.get('user');
+      userId = result['user_id'];
+      result.remove('user_id');
+      Map<dynamic, dynamic>? user = result;
       userBox.close();
-      if (user != null) {
-        UserModel u = UserModel.fromMap(user);
-        userData = u;
-        if (u.imageUrl != null) {
-          userImage = await ImageServices.loadImageLocaly(u.username);
-        } else {
-          throw Exception('failed to load image');
-        }
-        return userData;
-      }
-      return null;
+      userData = UserModel.fromMap(user);
     } catch (e) {
-      debugPrint('******* $e');
+      debugPrint('******11* $e');
       userBox.close();
-      return null;
     }
   }
 
-  static void loginBox() async {
-    final loginBox = await Hive.openBox<bool>('Login');
-    bool? result = loginBox.get('is_login');
-    debugPrint('** $result');
-    isLogin = result;
+  // static Future<UserModel?> getUserDataFromFireBase() async {
+
+  //   try {
+
+  //    await FirebaseFirestore.instance.collection('user').wh
+  //     return null;
+  //   } catch (e) {
+  //     debugPrint('******* $e');
+  //     userBox.close();
+  //     return null;
+  //   }
+  // }
+
+  static void getLoginBox() async {
+    final loginBox = await Hive.openBox<bool>(AppConstanntes.loginBox);
+
+    try {
+      bool? result = loginBox.get('is_login');
+      debugPrint('** $result');
+      isLogin = result;
+    } catch (e) {
+      debugPrint('**** $e');
+    }
     loginBox.close();
   }
 
@@ -67,16 +71,21 @@ class HiveServices {
     loginBox.close();
   }
 
-  static Future<List?> loadChats() async {
-    final chatBox = await Hive.openBox('Chat');
-
-   try {
-      List? chats = chatBox.get('chats', defaultValue: []);
-    return chats;
-   } catch (e) {
+  static Future<List<ChatModel>> loadChats(String id) async {
+    List<ChatModel> chats = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshots = await FirebaseFirestore
+          .instance
+          .collection('chat')
+          .where('users_id', arrayContains: id)
+          .get();
+      for (var doc in snapshots.docs) {
+        chats.add(ChatModel.fromFireStore(doc));
+      }
+      return chats;
+    } catch (e) {
       debugPrint('******* $e');
-      chatBox.close();
-      return null;
-   }
+      return [];
+    }
   }
 }

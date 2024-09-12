@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:chat_app/Constantes/app_colors.dart';
+import 'package:chat_app/Model/chat_model.dart';
 import 'package:chat_app/Model/user_model.dart';
 import 'package:chat_app/Services/hive_services.dart';
 import 'package:chat_app/Services/timestamp_adapter.dart';
 import 'package:chat_app/View/Pages/home_page.dart';
 import 'package:chat_app/View/Pages/login_page.dart';
+import 'package:chat_app/View/Pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +16,8 @@ import 'package:hive_flutter/adapters.dart';
 
 bool? isLogin;
 File? userImage;
-late UserModel userData;
+UserModel? userData;
+String? userId;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -23,22 +26,8 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    HiveServices.loginBox();
-    HiveServices.getUserDataLocaly();
-    final r = HiveServices.loadChats();
-    print(r);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +44,7 @@ class _MyAppState extends State<MyApp> {
           home: child,
         );
       },
-      child: isLogin == true ? const HomePage() : const LoginPage(),
+      child: const SplashScreen(),
     );
   }
 }

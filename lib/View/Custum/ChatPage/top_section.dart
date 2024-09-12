@@ -24,6 +24,7 @@ class ChatTpoSection extends StatelessWidget {
           UserIcon(
             hight: 30.sp,
             width: 30.sp,
+            userPic: '',
           ),
           SizedBox(width: 10.w),
           Column(
